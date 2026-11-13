@@ -28,6 +28,7 @@ description: "เตรียมและนำเว็บแอป Next.js ท
 2. Vercel → Add New → Project → Import repository (Framework: Next.js)
 3. Settings → Environment Variables ใส่ค่าตาม `.env.example`
    - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+   - `RESEND_API_KEY` ถ้าทำงานเสริมส่งอีเมล (US-6) **ห้ามตั้งชื่อขึ้นต้นด้วย `NEXT_PUBLIC_`**
    - `SUPABASE_SECRET_KEY` เฉพาะเมื่อโค้ดฝั่ง server ใช้จริง และ**ห้ามตั้งชื่อขึ้นต้นด้วย `NEXT_PUBLIC_`**
    - เลือก environment (Production / Preview) ให้ครบตามที่ใช้
 4. Deploy (ถ้าแก้ env vars หลัง deploy แล้ว ต้อง **Redeploy** ค่าใหม่จึงจะมีผล)

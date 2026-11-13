@@ -37,7 +37,7 @@
 
 ## Stack
 
-Next.js (App Router) + Supabase (Postgres, Auth, RLS) + Vercel โดยเขียนโค้ดด้วย Codex ใน VS Code · งานเสริมส่งอีเมลใช้ Resend
+Next.js (App Router) + Supabase (Postgres, Auth, RLS) + Vercel โดยเขียนโค้ดด้วย Codex ใน VS Code · งานเสริมส่งอีเมลใช้ Gmail SMTP
 
 ## ความเสี่ยงและข้อจำกัด
 
@@ -46,7 +46,7 @@ Next.js (App Router) + Supabase (Postgres, Auth, RLS) + Vercel โดยเข�
 | ข้อมูลการลงทะเบียนเป็นข้อมูลส่วนบุคคล | เปิด RLS ทุกตาราง และให้เห็นเฉพาะของตัวเอง |
 | หลายคนกดลงทะเบียนพร้อมกันจนเกินที่นั่ง | ตรวจที่นั่งเต็มในฐานข้อมูล ไม่ใช่แค่ปิดปุ่มบนหน้าจอ |
 | key หลุดขึ้น GitHub | เก็บใน `.env.local` ซึ่งอยู่ใน `.gitignore` และใช้ publishable key ฝั่ง browser เท่านั้น |
-| รหัสของบริการส่งอีเมล (Resend) หลุด | เก็บใน `.env.local` และ Environment Variables ของ Vercel ใช้ในโค้ดฝั่ง server เท่านั้น ห้ามขึ้นต้นด้วย `NEXT_PUBLIC_` |
+| App Password ของ Gmail หลุด (เข้าบัญชีได้ทั้งบัญชี) | ใช้บัญชี Gmail ที่สมัครไว้ทดลองโดยเฉพาะ เก็บใน `.env.local` และ Environment Variables ของ Vercel ใช้ในโค้ดฝั่ง server เท่านั้น ห้ามขึ้นต้นด้วย `NEXT_PUBLIC_` และลบ App Password เมื่อเลิกใช้ |
 | Supabase แบบฟรีส่งอีเมลยืนยันตัวตนได้จำกัดมาก | สำหรับ workshop ให้**ปิด Confirm email** ใน Supabase → Authentication → Sign In / Providers → Email เพื่อให้สมัครแล้วใช้ได้ทันที (เมื่อใช้งานจริงต้องเปิดกลับ และตั้งค่า SMTP ของตัวเอง) |
 | มีเวลาทำ 3 ชั่วโมง | ทำทีละ user story ตามลำดับ US-1 → US-6 ถ้าไม่ทันให้ deploy ส่วนที่ทำเสร็จแล้ว |
 

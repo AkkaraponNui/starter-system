@@ -25,8 +25,8 @@ description: "ตรวจความปลอดภัยของเว็บ
 1. **RLS:** ทุก `create table` ใน `supabase/migrations/` มี `enable row level security` ตามมา และมี policy ครบตาม `docs/design.md`
 2. **Policy กว้างเกินไป:** `using (true)` หรือ `with check (true)` บนข้อมูลรายบุคคล, policy ที่ไม่ระบุ `to`, update ที่ไม่มี `with check`, เงื่อนไขที่ไม่ผูกกับ `auth.uid()`
 3. **Security definer:** function ที่ไม่มี `set search_path = ''`, ไม่ตรวจ `auth.uid()` ทั้งที่ควรตรวจ หรือคืนข้อมูลเกินความจำเป็น
-4. **Key ในโค้ด:** ค้นหา `sb_secret_`, `service_role`, `re_` (Resend), `eyJ` (JWT) และรูปแบบ key อื่นในโค้ดและไฟล์ที่ commit แล้ว รวม `git log -p` ถ้าทำได้
-5. **Env vars:** ตัวแปรที่ขึ้นต้น `NEXT_PUBLIC_` ต้องเป็นค่าที่เปิดเผยได้เท่านั้น, `SUPABASE_SECRET_KEY` และ `RESEND_API_KEY` ต้องถูกใช้ในโค้ดฝั่ง server เท่านั้น (ไม่อยู่ในไฟล์ที่มี `"use client"` หรือ import เข้า Client Component)
+4. **Key ในโค้ด:** ค้นหา `sb_secret_`, `service_role`, `GMAIL_APP_PASSWORD=` ที่มีค่าจริง, `eyJ` (JWT) และรูปแบบ key อื่นในโค้ดและไฟล์ที่ commit แล้ว รวม `git log -p` ถ้าทำได้
+5. **Env vars:** ตัวแปรที่ขึ้นต้น `NEXT_PUBLIC_` ต้องเป็นค่าที่เปิดเผยได้เท่านั้น, `SUPABASE_SECRET_KEY`, `GMAIL_USER` และ `GMAIL_APP_PASSWORD` ต้องถูกใช้ในโค้ดฝั่ง server เท่านั้น (ไม่อยู่ในไฟล์ที่มี `"use client"` หรือ import เข้า Client Component)
 6. **.gitignore:** กันไฟล์ `.env.local` อยู่ (เช่น `.env*` หรือ `.env*.local`) และไม่มีไฟล์ env จริงถูก track
 7. **ฝั่ง server:** Server Action / Route Handler ตรวจผู้ใช้จาก session ไม่เชื่อ `user_id` หรือ role ที่ส่งมาจาก client
 8. **ข้อความผิดพลาด:** ไม่ส่งรายละเอียดภายใน, stack trace หรือค่าลับออกไปให้ผู้ใช้
@@ -37,6 +37,7 @@ description: "ตรวจความปลอดภัยของเว็บ
 |---|---|---|---|---|---|
 
 - เรียงจากระดับสูงไปต่ำ ถ้าไม่พบปัญหาในหัวข้อใด ให้บอกว่าตรวจแล้วไม่พบ
+- App Password ของ Gmail หลุด: แนะนำให้ลบ App Password นั้นที่ myaccount.google.com/apppasswords แล้วสร้างใหม่
 - secret key หลุดใน git: แนะนำให้สร้าง key ใหม่และยกเลิก key เดิมใน Supabase → Project Settings → API Keys
 - ปิดท้ายด้วยการทดสอบที่ผู้ใช้ควรทำเอง: ทดสอบด้วย 2 บัญชี และเปิด Security Advisor ใน Supabase Dashboard
 

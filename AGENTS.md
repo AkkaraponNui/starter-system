@@ -1,0 +1,44 @@
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
+
+# กติกาของโปรเจกต์ (Workshop: ระบบลงทะเบียนกิจกรรม)
+
+## ผู้ใช้เป็นผู้เริ่มต้น
+- ผู้ใช้ไม่ใช่โปรแกรมเมอร์ ตอบเป็นภาษาไทยที่เข้าใจง่าย อธิบายศัพท์เทคนิคสั้น ๆ ทุกครั้งที่ใช้
+- ทำงานทีละขั้น และจบทุกงานด้วยหัวข้อ **"สิ่งที่คุณต้องทำเอง"** เป็นรายการข้อที่คลิกหรือพิมพ์ตามได้ทันที เช่น เปิดเมนูไหนใน Supabase หรือวาง SQL จากไฟล์ไหน
+- ถ้ามี error ให้อธิบายด้วยภาษาง่ายก่อนว่าเกิดจากอะไร แล้วค่อยแก้
+- สรุปการเปลี่ยนแปลงเป็นภาษาคนว่าไฟล์ไหนเปลี่ยนเพื่ออะไร ไม่ต้องให้ผู้ใช้อ่านโค้ดทุกบรรทัด
+
+## เอกสาร
+- `docs/plan.md` และ `docs/requirements.md` ผู้สอนเตรียมไว้ให้แล้ว **ห้ามแก้** ถ้าไม่ชัดให้ถาม
+- `docs/design.md` สร้างด้วย `$sdlc-spec`
+- อ้างงานด้วยเลข US และ AC เสมอ เช่น "ทำ US-3", "ทดสอบ AC-3.4"
+
+## Stack และคำสั่ง
+- Next.js 16 (App Router, TypeScript, Tailwind) + Supabase (Postgres, Auth, RLS) + Vercel
+- รันบนเครื่อง: `npm run dev` แล้วเปิด http://localhost:3000
+- ตรวจโค้ด: `npm run lint` · ตรวจก่อน deploy: `npm run build`
+- Cache Components ปิดไว้ใน `next.config.ts` โดยตั้งใจ ห้ามเปิด
+
+## โครงสร้าง
+- `app/` หน้าเว็บ (หน้าแรกเป็นหน้าตรวจสถานะการเชื่อม Supabase เก็บไว้ได้ หรือเพิ่มลิงก์ไปหน้าอื่น)
+- `lib/supabase/client.ts` สำหรับโค้ดฝั่งเบราว์เซอร์ (ไฟล์ที่ขึ้นต้นด้วย `"use client"`)
+- `lib/supabase/server.ts` สำหรับ Server Component / Server Action / Route Handler
+- `proxy.ts` รีเฟรช session การล็อกอิน (Next.js 16 ใช้ proxy แทน middleware)
+- `supabase/migrations/` ไฟล์ SQL ทุกการเปลี่ยนโครงสร้างฐานข้อมูล
+
+## กติกาความปลอดภัย (ห้ามละเมิด)
+- ใช้ได้เฉพาะ `NEXT_PUBLIC_SUPABASE_URL` และ `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` โปรเจกต์นี้ไม่ใช้ secret key
+- ห้ามใส่ key หรือรหัสผ่านในโค้ด และห้ามแสดงค่าจาก `.env.local` ในคำตอบ
+- ทุกตารางต้องเปิด RLS และมี policy ตาม `docs/design.md`
+- ห้ามแก้ปัญหาด้วยการปิด RLS หรือเขียน policy ที่เปิดข้อมูลส่วนบุคคลให้ทุกคน
+- กติกาที่กระทบความถูกต้อง (ห้ามลงซ้ำ, ที่นั่งเต็ม) ต้องบังคับในฐานข้อมูล
+- Codex ห้ามรัน SQL กับฐานข้อมูลเอง ให้เขียนไฟล์ใน `supabase/migrations/` แล้วบอกผู้ใช้ให้วางรันใน Supabase SQL Editor
+- ตรวจผู้ใช้ฝั่ง server ด้วย `supabase.auth.getUser()` หรือ `getClaims()` ไม่เชื่อ `user_id` ที่ส่งมาจากฟอร์ม

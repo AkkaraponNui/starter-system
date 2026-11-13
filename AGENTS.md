@@ -1,13 +1,3 @@
-<!-- BEGIN:nextjs-agent-rules -->
-
-## This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
-
 # กติกาของโปรเจกต์ (Workshop: ระบบลงทะเบียนกิจกรรม)
 
 ## ผู้ใช้เป็นผู้เริ่มต้น
@@ -15,6 +5,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - ทำงานทีละขั้น และจบทุกงานด้วยหัวข้อ **"สิ่งที่คุณต้องทำเอง"** เป็นรายการข้อที่คลิกหรือพิมพ์ตามได้ทันที เช่น เปิดเมนูไหนใน Supabase หรือวาง SQL จากไฟล์ไหน
 - ถ้ามี error ให้อธิบายด้วยภาษาง่ายก่อนว่าเกิดจากอะไร แล้วค่อยแก้
 - สรุปการเปลี่ยนแปลงเป็นภาษาคนว่าไฟล์ไหนเปลี่ยนเพื่ออะไร ไม่ต้องให้ผู้ใช้อ่านโค้ดทุกบรรทัด
+
+## เริ่มต้นโปรเจกต์
+- repo นี้เริ่มจากเอกสารอย่างเดียว ถ้ายังไม่มี `package.json` ให้ใช้ `$project-setup` สร้างเว็บตั้งต้นก่อนทำงานอื่น
+- ห้ามสร้างโปรเจกต์ด้วยวิธีอื่น เพื่อให้ทุกเครื่องได้โครงเดียวกัน
 
 ## เอกสาร
 - `docs/plan.md` และ `docs/requirements.md` ผู้สอนเตรียมไว้ให้แล้ว **ห้ามแก้** ถ้าไม่ชัดให้ถาม
@@ -27,7 +21,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - ตรวจโค้ด: `npm run lint` · ตรวจก่อน deploy: `npm run build`
 - Cache Components ปิดไว้ใน `next.config.ts` โดยตั้งใจ ห้ามเปิด
 
-## โครงสร้าง
+## โครงสร้าง (หลังรัน `$project-setup`)
 - `app/` หน้าเว็บ (หน้าแรกเป็นหน้าตรวจสถานะการเชื่อม Supabase เก็บไว้ได้ หรือเพิ่มลิงก์ไปหน้าอื่น)
 - `lib/supabase/client.ts` สำหรับโค้ดฝั่งเบราว์เซอร์ (ไฟล์ที่ขึ้นต้นด้วย `"use client"`)
 - `lib/supabase/server.ts` สำหรับ Server Component / Server Action / Route Handler

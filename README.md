@@ -1,31 +1,40 @@
-# ระบบลงทะเบียนกิจกรรม (โปรเจกต์ตั้งต้นสำหรับ workshop)
+# ระบบลงทะเบียนกิจกรรม (ชุดเริ่มต้นสำหรับ workshop)
 
-โปรเจกต์นี้ตั้ง Next.js และเชื่อม Supabase ไว้ให้แล้ว คุณจะใช้ Codex สร้างฟีเจอร์ต่อทีละขั้น
+ใน repo นี้มีแค่เอกสารและ Skill ยังไม่มีโค้ด คุณจะสั่ง Codex สร้างเว็บเองตั้งแต่ต้น แล้วสร้างฟีเจอร์ต่อทีละขั้นตาม SDLC
+
+| ไฟล์ | คืออะไร |
+|---|---|
+| `docs/plan.md` | แผนงาน (ขั้น Planning) ผู้สอนเตรียมไว้ให้ |
+| `docs/requirements.md` | ความต้องการ user story และเกณฑ์ยอมรับ (ขั้น Requirements) ผู้สอนเตรียมไว้ให้ |
+| `.env.example` | ตัวอย่างไฟล์เก็บรหัสเชื่อม Supabase (ไม่มีค่าจริง) |
+| `.agents/skills/` | Skill 7 ตัวที่ Codex ใช้ ได้มาพร้อม repo ไม่ต้องติดตั้งเอง |
+| `AGENTS.md` | กติกาที่ Codex ต้องทำตามในโปรเจกต์นี้ |
 
 ## สิ่งที่ต้องมีก่อน
 - ติดตั้ง VS Code, Node.js (รุ่น LTS) และ Git แล้ว
 - ติดตั้ง Codex ใน VS Code และล็อกอินแล้ว
-- ติดตั้ง Workshop Skills แล้ว (พิมพ์ `$` ในช่องแชทของ Codex ต้องเห็น `sdlc-spec`, `supabase-feature` และตัวอื่น)
-- มีบัญชี GitHub, Supabase และ Vercel
+- มีบัญชี GitHub, Supabase และ Vercel และสร้าง project ใน Supabase ไว้ 1 อัน
 
-## เริ่มใช้งาน (ทำครั้งเดียว ประมาณ 10 นาที)
+## เริ่มใช้งาน (ประมาณ 15 นาที)
 
-1. **เอาโปรเจกต์มาไว้ในเครื่อง**
-   บน GitHub กดปุ่ม **Use this template → Create a new repository** ตั้งชื่อ repo ของคุณ
+1. **เอา repo มาไว้ในเครื่อง**
+   บน GitHub กด **Use this template → Create a new repository** ตั้งชื่อ repo ของคุณ
    แล้วใน VS Code กด **Clone Git Repository** วางลิงก์ repo ที่เพิ่งสร้าง เลือกโฟลเดอร์ แล้วกด **Open**
-2. **ติดตั้งส่วนประกอบ**
-   ใน VS Code เปิด Terminal (เมนู **Terminal → New Terminal**) แล้วพิมพ์
+2. **ตรวจว่า Codex เห็น Skill**
+   พิมพ์ `$` ในช่องแชทของ Codex ต้องเห็นชื่อ Skill ครบ 7 ตัว ถ้าไม่เห็น ให้ปิดแล้วเปิด VS Code ใหม่
+3. **สั่ง Codex สร้างเว็บตั้งต้น** พิมพ์ในแชทของ Codex
 
    ```
-   npm install
+   ใช้ $project-setup สร้างเว็บตั้งต้นในโฟลเดอร์นี้
    ```
 
-3. **ใส่ค่าการเชื่อม Supabase**
+   ระหว่างทำงาน Codex จะขออนุญาตรันคำสั่งที่ต้องดาวน์โหลด ให้กด**อนุญาต** รอประมาณ 3–5 นาที
+4. **ใส่ค่าการเชื่อม Supabase**
    - คัดลอกไฟล์ `.env.example` แล้วเปลี่ยนชื่อสำเนาเป็น `.env.local`
    - ใน Supabase เปิดโปรเจกต์ → **Project Settings → API Keys** คัดลอก **Publishable key**
    - คัดลอก **Project URL** (ปุ่ม **Connect** ด้านบนของหน้าโปรเจกต์)
    - วางทั้งสองค่าใน `.env.local` แทนค่าตัวอย่าง แล้วบันทึกไฟล์
-4. **เปิดเว็บบนเครื่อง**
+5. **เปิดเว็บบนเครื่อง** ใน Terminal (เมนู **Terminal → New Terminal**) พิมพ์
 
    ```
    npm run dev
@@ -38,6 +47,7 @@
 
 | ขั้น | พิมพ์ใน Codex |
 |---|---|
+| สร้างเว็บตั้งต้น | `ใช้ $project-setup สร้างเว็บตั้งต้นในโฟลเดอร์นี้` |
 | ออกแบบ | `ใช้ $sdlc-spec อ่าน docs/plan.md และ docs/requirements.md แล้วเขียน docs/design.md โดยไม่แก้สองไฟล์แรก` |
 | ดูกิจกรรม | `ใช้ $supabase-feature ทำ US-2` |
 | ล็อกอิน | `ใช้ $supabase-feature ทำ US-1` |

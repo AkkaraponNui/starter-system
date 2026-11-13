@@ -39,10 +39,11 @@
 
 ## ตารางสิทธิ์ (ใช้เป็นแบบของ RLS)
 | ตาราง | บทบาท | select | insert | update | delete | เงื่อนไข |
-| events | anon, authenticated | ✓ | – | – | – | ทุกแถว |
-| registrations | authenticated (เจ้าของ) | ✓ | ✓ | – | ✓ | user_id = auth.uid() |
+| tasks | สมาชิกทีม | ✓ | – | สถานะ (ถ้าเป็นผู้รับงาน) | – | อยู่ทีมเดียวกับงาน |
+| tasks | หัวหน้าทีม | ✓ | ✓ | ✓ | – | team_id เป็นทีมที่ตัวเองเป็นหัวหน้า |
+| tasks | คนนอกทีม | – | – | – | – | – |
 
-## ข้อมูลรวมข้ามแถว (view / function)
+## Function ที่ใช้ตรวจสิทธิ์ / ทำงานแทนผู้ใช้ (security definer)
 ## กติกาที่บังคับในฐานข้อมูล
 ## หน้าจอ
 | route | ใช้ทำอะไร | user story |

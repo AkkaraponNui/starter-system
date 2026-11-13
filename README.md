@@ -1,4 +1,4 @@
-# ระบบลงทะเบียนกิจกรรม (ชุดเริ่มต้นสำหรับ workshop)
+# ระบบติดตามงานทีม (ชุดเริ่มต้นสำหรับ workshop)
 
 ใน repo นี้มีแค่เอกสารและ Skill ยังไม่มีโค้ด คุณจะสั่ง Codex สร้างเว็บเองตั้งแต่ต้น แล้วสร้างฟีเจอร์ต่อทีละขั้นตาม SDLC
 
@@ -6,6 +6,7 @@
 |---|---|
 | `docs/plan.md` | แผนงาน (ขั้น Planning) ผู้สอนเตรียมไว้ให้ |
 | `docs/requirements.md` | ความต้องการ user story และเกณฑ์ยอมรับ (ขั้น Requirements) ผู้สอนเตรียมไว้ให้ |
+| `docs/setup-supabase-vercel.md` | คู่มือตั้งค่า Supabase และ Vercel ทีละขั้น |
 | `.env.example` | ตัวอย่างไฟล์เก็บรหัสเชื่อม Supabase (ไม่มีค่าจริง) |
 | `.agents/skills/` | Skill 7 ตัวที่ Codex ใช้ ได้มาพร้อม repo ไม่ต้องติดตั้งเอง |
 | `AGENTS.md` | กติกาที่ Codex ต้องทำตามในโปรเจกต์นี้ |
@@ -13,7 +14,7 @@
 ## สิ่งที่ต้องมีก่อน
 - ติดตั้ง VS Code, Node.js (รุ่น LTS) และ Git แล้ว
 - ติดตั้ง Codex ใน VS Code และล็อกอินแล้ว
-- มีบัญชี GitHub, Supabase และ Vercel และสร้าง project ใน Supabase ไว้ 1 อัน
+- มีบัญชี GitHub, Supabase และ Vercel และสร้าง project ใน Supabase ไว้ 1 อัน (ทำตาม [คู่มือตั้งค่า Supabase และ Vercel](docs/setup-supabase-vercel.md) ส่วนที่ 1)
 
 ## เริ่มใช้งาน (ประมาณ 15 นาที)
 
@@ -49,10 +50,11 @@
 |---|---|
 | สร้างเว็บตั้งต้น | `ใช้ $project-setup สร้างเว็บตั้งต้นในโฟลเดอร์นี้` |
 | ออกแบบ | `ใช้ $sdlc-spec อ่าน docs/plan.md และ docs/requirements.md แล้วเขียน docs/design.md โดยไม่แก้สองไฟล์แรก` |
-| ดูกิจกรรม | `ใช้ $supabase-feature ทำ US-2` |
 | ล็อกอิน | `ใช้ $supabase-feature ทำ US-1` |
-| ลงทะเบียน | `ใช้ $supabase-feature ทำ US-3` |
-| งานเสริม | `ใช้ $supabase-feature ทำ US-4` แล้ว `ทำ US-5` |
+| สร้าง / เข้าร่วมทีม | `ใช้ $supabase-feature ทำ US-2` |
+| สร้างและมอบหมายงาน | `ใช้ $supabase-feature ทำ US-3` |
+| อัปเดตสถานะงาน | `ใช้ $supabase-feature ทำ US-4` |
+| งานเสริม | `ใช้ $supabase-feature ทำ US-5` แล้ว `ทำ US-6` |
 | ทดสอบ | `ใช้ $acceptance-test ทำรายการทดสอบของ US ที่ทำแล้ว` |
 | ก่อน deploy | `ใช้ $security-check ตรวจโปรเจกต์ รายงานอย่างเดียว` แล้ว `ใช้ $vercel-deploy` |
 

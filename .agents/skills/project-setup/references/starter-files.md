@@ -128,13 +128,13 @@ async function checkSupabase(): Promise<Status> {
 
   const supabase = await createClient();
   const { error } = await supabase
-    .from("events")
+    .from("profiles")
     .select("id", { count: "exact", head: true });
 
   if (!error) {
     return {
       ok: true,
-      title: "เชื่อม Supabase สำเร็จ และพบตาราง events แล้ว",
+      title: "เชื่อม Supabase สำเร็จ และพบตาราง profiles แล้ว",
       detail: "พร้อมทำ user story ถัดไป",
     };
   }
@@ -149,7 +149,7 @@ async function checkSupabase(): Promise<Status> {
       ok: true,
       title: "เชื่อม Supabase สำเร็จ",
       detail:
-        "ยังไม่มีตาราง events ซึ่งถูกต้องสำหรับตอนเริ่มต้น ขั้นต่อไปคือสั่ง Codex ทำ US-2",
+        "ยังไม่มีตาราง profiles ซึ่งถูกต้องสำหรับตอนเริ่มต้น ขั้นต่อไปคือออกแบบระบบ แล้วสั่ง Codex ทำ US-1",
     };
   }
 
@@ -165,7 +165,7 @@ export default async function Home() {
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-12">
-      <h1 className="text-3xl font-bold text-blue-900">ระบบลงทะเบียนกิจกรรม</h1>
+      <h1 className="text-3xl font-bold text-blue-900">ระบบติดตามงานทีม</h1>
       <p className="mt-2 text-slate-600">
         โปรเจกต์ตั้งต้นสำหรับ workshop สร้างระบบด้วย Codex
       </p>
@@ -189,7 +189,7 @@ export default async function Home() {
         <ol className="mt-3 list-decimal space-y-1 pl-5 text-slate-700">
           <li>อ่าน docs/plan.md และ docs/requirements.md</li>
           <li>สั่ง Codex: ใช้ $sdlc-spec เขียน docs/design.md</li>
-          <li>สั่ง Codex: ใช้ $supabase-feature ทำ US-2</li>
+          <li>สั่ง Codex: ใช้ $supabase-feature ทำ US-1</li>
         </ol>
       </section>
     </main>
@@ -210,7 +210,7 @@ const notoSansThai = Noto_Sans_Thai({
 });
 
 export const metadata: Metadata = {
-  title: "ระบบลงทะเบียนกิจกรรม",
+  title: "ระบบติดตามงานทีม",
   description: "Workshop: สร้างระบบด้วย Codex",
 };
 

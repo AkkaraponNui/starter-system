@@ -1,6 +1,6 @@
-# ส่งอีเมลยืนยันด้วย Gmail SMTP (US-6)
+# ส่งอีเมลแจ้งผู้รับงานด้วย Gmail SMTP (US-6)
 
-ส่งอีเมลจาก Server Action หลังบันทึกการลงทะเบียนสำเร็จ ผ่านเซิร์ฟเวอร์ส่งอีเมลของ Gmail (SMTP) ด้วยแพ็กเกจ `nodemailer` ถ้ารุ่นที่ติดตั้งเรียก API ต่างจากนี้ ให้ดูเอกสารของรุ่นนั้น
+ส่งอีเมลจาก Server Action หลังหัวหน้าสร้างงานสำเร็จ ผ่านเซิร์ฟเวอร์ส่งอีเมลของ Gmail (SMTP) ด้วยแพ็กเกจ `nodemailer` ถ้ารุ่นที่ติดตั้งเรียก API ต่างจากนี้ ให้ดูเอกสารของรุ่นนั้น
 
 ## แพ็กเกจและ env
 
@@ -24,27 +24,29 @@ npm install -D @types/nodemailer
 import "server-only";
 import nodemailer from "nodemailer";
 
-type RegistrationEmail = {
+type TaskAssignedEmail = {
   to: string;
   title: string;
-  startsAt: string;
-  location: string | null;
+  dueDate: string | null; // รูปแบบ YYYY-MM-DD จากคอลัมน์ date
+  teamName: string;
+  assignedBy: string;
 };
 
-// ส่งอีเมลยืนยันการลงทะเบียนผ่าน Gmail SMTP คืนผลว่าสำเร็จไหม โดยไม่โยน error ออกไป
-// เพื่อให้การลงทะเบียนสำเร็จได้แม้ส่งอีเมลไม่ได้ (AC-6.3)
-export async function sendRegistrationEmail(
-  input: RegistrationEmail,
+// ส่งอีเมลแจ้งผู้รับงานผ่าน Gmail SMTP คืนผลว่าสำเร็จไหม โดยไม่โยน error ออกไป
+// เพื่อให้สร้างงานสำเร็จได้แม้ส่งอีเมลไม่ได้ (AC-6.3)
+export async function sendTaskAssignedEmail(
+  input: TaskAssignedEmail,
 ): Promise<boolean> {
   const user = process.env.GMAIL_USER;
   const pass = process.env.GMAIL_APP_PASSWORD;
   if (!user || !pass) return false;
 
-  const when = new Intl.DateTimeFormat("th-TH", {
-    dateStyle: "long",
-    timeStyle: "short",
-    timeZone: "Asia/Bangkok",
-  }).format(new Date(input.startsAt));
+  const due = input.dueDate
+    ? new Intl.DateTimeFormat("th-TH", {
+        dateStyle: "long",
+        timeZone: "Asia/Bangkok",
+      }).format(new Date(`${input.dueDate}T00:00:00+07:00`))
+    : "ไม่มีกำหนด";
 
   try {
     const transporter = nodemailer.createTransport({
@@ -54,15 +56,15 @@ export async function sendRegistrationEmail(
       auth: { user, pass },
     });
     await transporter.sendMail({
-      from: `ระบบลงทะเบียนกิจกรรม <${user}>`,
+      from: `ระบบติดตามงานทีม <${user}>`,
       to: input.to,
-      subject: `ยืนยันการลงทะเบียน: ${input.title}`,
+      subject: `งานใหม่: ${input.title}`,
       text: [
-        "คุณลงทะเบียนกิจกรรมสำเร็จแล้ว",
+        `${input.assignedBy} มอบหมายงานใหม่ให้คุณ`,
         "",
-        `กิจกรรม: ${input.title}`,
-        `วันเวลา: ${when}`,
-        `สถานที่: ${input.location ?? "-"}`,
+        `งาน: ${input.title}`,
+        `กำหนดส่ง: ${due}`,
+        `ทีม: ${input.teamName}`,
       ].join("\n"),
     });
     return true;
@@ -72,16 +74,16 @@ export async function sendRegistrationEmail(
 }
 ```
 
-## เรียกใช้ใน Server Action ของการลงทะเบียน
+## เรียกใช้ใน Server Action ของการสร้างงาน
 
-1. ตรวจผู้ใช้ด้วย `supabase.auth.getUser()` แล้วใช้ `user.email` เป็นผู้รับ **ห้ามรับอีเมลผู้รับจากฟอร์มหรือคำขอ** (AC-6.4)
-2. บันทึกการลงทะเบียนตามเดิม ถ้าไม่สำเร็จ (ซ้ำ หรือเต็ม) ให้คืนข้อความผิดพลาดเดิมและ**ไม่ส่งอีเมล** (AC-6.2)
-3. สำเร็จแล้วค่อยอ่านชื่อ วันเวลา และสถานที่ของกิจกรรมจากฐานข้อมูล แล้วเรียก `sendRegistrationEmail`
-4. ถ้าได้ `false` ให้คืนผลว่าลงทะเบียนสำเร็จพร้อมข้อความ "ลงทะเบียนแล้ว แต่ส่งอีเมลยืนยันไม่สำเร็จ" ห้ามยกเลิกการลงทะเบียน (AC-6.3)
+1. ตรวจผู้ใช้ด้วย `supabase.auth.getUser()` แล้วสร้างงานตามเดิม ถ้าไม่สำเร็จ (ไม่ใช่หัวหน้า ผู้รับงานไม่อยู่ในทีม หรือไม่กรอกชื่องาน) ให้คืนข้อความผิดพลาดเดิมและ**ไม่ส่งอีเมล** (AC-6.2)
+2. สำเร็จแล้วค่อยอ่าน `email` ของผู้รับงานจากตาราง `profiles` ด้วย `assignee_id` ของงานที่เพิ่งสร้าง (RLS ให้หัวหน้าอ่านโปรไฟล์ของเพื่อนร่วมทีมได้อยู่แล้ว) **ห้ามรับอีเมลผู้รับจากฟอร์มหรือคำขอ** (AC-6.4)
+3. อ่านชื่อทีมจาก `teams` และชื่อที่แสดงของหัวหน้าจาก `profiles` แล้วเรียก `sendTaskAssignedEmail`
+4. ถ้าได้ `false` ให้คืนผลว่าสร้างงานสำเร็จพร้อมข้อความ "สร้างงานแล้ว แต่ส่งอีเมลแจ้งไม่สำเร็จ" ห้ามลบงานที่สร้างแล้ว (AC-6.3)
 5. ห้าม import `lib/email.ts` ในไฟล์ที่ขึ้นต้นด้วย `"use client"` (`server-only` จะทำให้ build ไม่ผ่านถ้าเผลอ import)
 6. ห้ามตั้ง `export const runtime = "edge"` ในไฟล์ที่ส่งอีเมล เพราะ SMTP ต้องใช้ Node.js runtime (ค่าเริ่มต้น)
 
-ไม่ต้องสร้างตารางหรือ migration ใหม่สำหรับ US-6
+ไม่ต้องสร้างตารางหรือ migration ใหม่สำหรับ US-6 (อีเมลของผู้ใช้เก็บไว้ใน `profiles` ตั้งแต่ US-1)
 
 ## สิ่งที่คุณต้องทำเอง (เขียนให้ผู้ใช้ตามนี้)
 
@@ -94,7 +96,7 @@ export async function sendRegistrationEmail(
    GMAIL_APP_PASSWORD=รหัส16ตัวไม่ต้องเว้นวรรค
    ```
 5. หยุด `npm run dev` (กด Ctrl+C) แล้วรันใหม่ เพื่อให้อ่านค่าใหม่
-6. ลงทะเบียนกิจกรรม 1 รายการ แล้วเปิดกล่องอีเมลของบัญชีที่ใช้ล็อกอินเว็บ (ดูในโฟลเดอร์สแปมด้วย)
+6. ล็อกอินบัญชีหัวหน้า สร้างงาน 1 ชิ้นมอบให้สมาชิก แล้วเปิดกล่องอีเมลของผู้รับงาน (ดูในโฟลเดอร์สแปมด้วย)
 7. ตอน deploy: Vercel → Settings → Environment Variables → เพิ่มทั้ง 2 ค่า → **Redeploy**
 8. เลิกใช้หรือสงสัยว่ารหัสหลุด: เปิด myaccount.google.com/apppasswords แล้วลบ App Password นั้นทันที
 

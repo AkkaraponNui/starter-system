@@ -35,7 +35,7 @@ npx create-next-app@latest setup-tmp --ts --eslint --tailwind --app --no-src-dir
 - `.gitignore` → รวมกับของเดิม ต้องมี `.env*` และ `!.env.example` และ `setup-tmp/`
 
 แล้วลบ `setup-tmp/` และปรับ 2 จุด
-- `package.json` → เปลี่ยน `"name": "setup-tmp"` เป็น `"name": "event-app"`
+- `package.json` → เปลี่ยน `"name": "setup-tmp"` เป็น `"name": "task-app"`
 - `next.config.ts` → **ลบบรรทัด `cacheComponents: true` และ `partialPrefetching: true`** (ค่าเริ่มต้นของ Next.js 16 เปิดไว้ ทำให้หน้าที่ใช้การล็อกอินและหน้าตรวจสถานะ build ไม่ผ่าน) คงส่วนอื่นไว้ แล้วเติมคอมเมนต์ว่าปิดไว้โดยตั้งใจ
 
 ## 2. ติดตั้งและเชื่อม Supabase
@@ -54,7 +54,7 @@ npm install @supabase/supabase-js @supabase/ssr
 | `lib/supabase/server.ts` | ตัวเชื่อม Supabase ฝั่ง server (ผูก session ผู้ใช้ ทำให้ RLS ทำงาน) |
 | `proxy.ts` | รีเฟรช session การล็อกอินทุกคำขอ (Next.js 16 ใช้ proxy แทน middleware) |
 | `app/page.tsx` | หน้าตรวจสถานะ: กล่องสีเขียว "เชื่อม Supabase สำเร็จ" หรือกล่องสีเหลืองพร้อมวิธีแก้ |
-| `app/layout.tsx` | ฟอนต์ Noto Sans Thai, `lang="th"`, ชื่อเว็บ "ระบบลงทะเบียนกิจกรรม" |
+| `app/layout.tsx` | ฟอนต์ Noto Sans Thai, `lang="th"`, ชื่อเว็บ "ระบบติดตามงานทีม" |
 | `supabase/migrations/.gitkeep` | โฟลเดอร์เก็บไฟล์ SQL ในขั้นต่อไป |
 
 กติกา
